@@ -24,6 +24,8 @@
     },
     "VOICEVOX_KEY": {
       "description": "VOICEVOXのKEYを入力します。"
-    }
+    },
+    "VOICEVOX_SPEAKER": {
+      "description": "VOICEVOXの話者IDを入力します。空欄にすると「四国めたん ノーマル」に設定されます"
   }
 }
