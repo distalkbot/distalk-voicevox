@@ -10,7 +10,7 @@ import json
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 token = os.environ['DISCORD_BOT_TOKEN']
 voicevox_key = os.environ['VOICEVOX_KEY']
-voicevox_speaker = os.environ['VOICEVOX_SPEAKER']
+voicevox_speaker = os.getenv('VOICEVOX_SPEAKER', default='0')
 client = commands.Bot(command_prefix=prefix)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
