@@ -137,7 +137,6 @@ async def on_voice_state_update(member, before, after):
             else:
                 if member.guild.voice_client.channel is after.channel:
                     text = member.name + 'さんが入室しました'
-                    s_quote = urllib.parse.quote(text)
                     mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
@@ -154,7 +153,6 @@ async def on_voice_state_update(member, before, after):
                         await member.guild.voice_client.disconnect()
                     else:
                         text = member.name + 'さんが退室しました'
-                        s_quote = urllib.parse.quote(text)
                         mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}'
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
