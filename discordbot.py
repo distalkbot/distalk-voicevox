@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 import os
 import traceback
-import urllib.parse
 import re
 import emoji
 import json
