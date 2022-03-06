@@ -1,6 +1,29 @@
 {
-  "name": "discordpy-startup",
-  "description": "Herokuでdiscord.pyを始めるテンプレート",
-  "repository": "https://github.com/DiscordBotPortalJP/discordpy-startup",
-  "keywords": ["python", "discord", "bot"]
+  "name": "distalk",
+  "description": "Discord TTS on heroku, Powered by VOICEVOX API.",
+  "repository": "https://github.com/distalkbot/distalk-voicevox",
+  "keywords": ["python", "discord", "bot"],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-python.git"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    },
+    {
+      "url": "https://github.com/Crazycatz00/heroku-buildpack-libopus.git"
+    }
+  ],
+  "env": {
+    "DISCORD_BOT_TOKEN": {
+            "description": "ボットのトークンを入力します。"
+    },
+    "DISCORD_BOT_PREFIX": {
+            "description": "ボットのプレフィックスを入力します。空欄にすると「🦑」に設定されます。",
+            "required": false
+    },
+    "VOICEVOX_KEY": {
+      "description": "VOICEVOXのKEYを入力します。"
+    }
+  }
 }
