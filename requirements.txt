@@ -1,2 +1,2 @@
-py-cord[voice]
+discord.py[voice]
 emoji
