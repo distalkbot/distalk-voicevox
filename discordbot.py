@@ -62,7 +62,7 @@ async def on_message(message):
                 text = message.content
 
                 # Add author's name
-                text = message.author.name + '、' + text
+                text = message.author.nick + '、' + text
 
                 # Replace new line
                 text = text.replace('\n', '、')
@@ -140,7 +140,7 @@ async def on_voice_state_update(member, before, after):
                 await after.channel.connect()
             else:
                 if member.guild.voice_client.channel is after.channel:
-                    text = member.name + 'さんが入室しました'
+                    text = member.nick + 'さんが入室しました'
                     mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
