@@ -151,6 +151,21 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     return text
 
 
+async def mp3_player(text: str, voice_client: discord.VoiceClient, message: Optional[discord.Message] = None):
+    """
+    docstring
+    """
+    mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
+    while voice_client.is_playing():
+        await asyncio.sleep(0.5)
+    try:
+        voice_client.play(discord.FFmpegPCMAudio(mp3url))
+    except OSError as e:
+        print("audio playing stopped cuz fatal error occurred:", e)
+        if message:
+            await message.reply(f"エラーが発生したので再生をストップしました、ごめんなさい！ ><\n```\n{e.strerror}\n```")
+
+
 @client.event
 async def on_message(message):
     if message.guild.voice_client:
@@ -158,34 +173,34 @@ async def on_message(message):
             if not message.content.startswith(prefix):
                 text = message.content
                 text = text_converter(text, message)
-                mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
-                download_path = f'tmp/{message.id}'
-                if not os.path.exists(download_path):
-                    os.makedirs(download_path, exist_ok=True)
-                mp3_path = f'{download_path}/{message.id}.mp3'
-                if not os.path.exists(mp3_path):
-                    print("Downloading...")
-                    try:
-                        async with aiohttp.ClientSession() as session:
-                            async with session.get(mp3url) as resp:
-                                if resp.status == 200:
-                                    with open(mp3_path, 'wb') as f:
-                                        f.write(await resp.read())
-                                    print("Downloaded.")
-                                else:
-                                    print("Download failed.")
-                    except Exception as e:
-                        print("Download failed cuz something error happend;", e)
-                else:
-                    print("Already downloaded.")
-                if os.path.exists(mp3_path):
-                    while message.guild.voice_client.is_playing():
-                        await asyncio.sleep(0.5)
-                    message.guild.voice_client.play(
-                        discord.FFmpegPCMAudio(mp3_path))
-                    os.remove(mp3_path)
-                else:
-                    await message.reply("音声のダウンロードをミスっちゃいました、ごめんなさい！")
+                # download_path = f'tmp'
+                # if not os.path.exists(download_path):
+                #     os.makedirs(download_path, exist_ok=True)
+                # mp3_path = f'{download_path}/{message.id}.mp3'
+                # if not os.path.exists(mp3_path):
+                #     print("Downloading...")
+                #     try:
+                #         async with aiohttp.ClientSession() as session:
+                #             async with session.get(mp3url) as resp:
+                #                 if resp.status == 200:
+                #                     with open(mp3_path, 'wb') as f:
+                #                         f.write(await resp.read())
+                #                     print("Downloaded.")
+                #                 else:
+                #                     print("Download failed.")
+                #     except Exception as e:
+                #         print("Download failed cuz something error happend;", e)
+                # else:
+                #     print("Already downloaded.")
+                # if os.path.exists(mp3_path):
+                #     while message.guild.voice_client.is_playing():
+                #         await asyncio.sleep(0.5)
+                #     message.guild.voice_client.play(
+                #         discord.FFmpegPCMAudio(mp3_path))
+                #     os.remove(mp3_path)
+                # else:
+                #     await message.reply("音声のダウンロードをミスっちゃいました、ごめんなさい！")
+                await mp3_player(text, message.guild.voice_client, message)
     await client.process_commands(message)
 
 
@@ -203,11 +218,7 @@ async def on_voice_state_update(member, before, after):
                 if member.guild.voice_client.channel is after.channel:
                     text = member.display_name + 'さんが入室しました'
                     text = text_converter(text)
-                    mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
-                    while member.guild.voice_client.is_playing():
-                        await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(
-                        discord.FFmpegPCMAudio(mp3url))
+                    await mp3_player(text, member.guild.voice_client)
     elif after.channel is None:
         if member.id == client.user.id:
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
@@ -221,11 +232,7 @@ async def on_voice_state_update(member, before, after):
                     else:
                         text = member.display_name + 'さんが退室しました'
                         text = text_converter(text)
-                        mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
-                        while member.guild.voice_client.is_playing():
-                            await asyncio.sleep(0.5)
-                        member.guild.voice_client.play(
-                            discord.FFmpegPCMAudio(mp3url))
+                        await mp3_player(text, member.guild.voice_client)
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
