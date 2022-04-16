@@ -7,6 +7,7 @@ import re
 import emoji
 import json
 import jaconv
+import english_to_kana.py
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 token = os.environ['DISCORD_BOT_TOKEN']
@@ -123,7 +124,7 @@ async def on_message(message):
                     else:
                         text += '、添付ファイル'
                         
-                text = jaconv.alphabet2kata(text)
+                text = EnglishToKana(text)
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
@@ -143,6 +144,7 @@ async def on_voice_state_update(member, before, after):
             else:
                 if member.guild.voice_client.channel is after.channel:
                     text = member.display_name + 'さんが入室しました'
+                    text = EnglishToKana(text)
                     mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
@@ -159,6 +161,8 @@ async def on_voice_state_update(member, before, after):
                         await member.guild.voice_client.disconnect()
                     else:
                         text = member.display_name + 'さんが退室しました'
+                        text = EnglishToKana(text)
+                        text = jaconv.alphabet2kata(text)
                         mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
