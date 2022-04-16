@@ -1,4 +1,6 @@
 import asyncio
+from typing import Optional
+import aiohttp
 import discord
 from discord.ext import commands
 import os
