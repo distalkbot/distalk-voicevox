@@ -6,6 +6,7 @@ import traceback
 import re
 import emoji
 import json
+import jaconv
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 token = os.environ['DISCORD_BOT_TOKEN']
@@ -121,7 +122,8 @@ async def on_message(message):
                         text += '、画像'
                     else:
                         text += '、添付ファイル'
-
+                        
+                text = jaconv.alphabet2kata(text)
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
