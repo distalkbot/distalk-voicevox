@@ -145,7 +145,7 @@ async def on_message(message):
 
                 etk_text = ETK.convert(text)
                 a2k_text = jaconv.alphabet2kata(text)
-                text = jaconv.alphabet2kata(etk_text)
+                text = jaconv.alphabet2kata(etk_text.lower())
                 print(" -> ", text, f" (ETK:{etk_text}, A2K:{a2k_text})")
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                 while message.guild.voice_client.is_playing():
