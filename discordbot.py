@@ -215,4 +215,5 @@ async def ヘルプ(ctx):
 {prefix}切断：ボイスチャンネルから切断します。'''
     await ctx.send(message)
 
-client.run(token)
+if __name__ == "__main__":
+    client.run(token)
