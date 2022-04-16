@@ -62,7 +62,7 @@ async def on_message(message):
                 text = message.content
 
                 # Add author's name
-                text = message.author.name + '、' + text
+                text = message.author.display_name + '、' + text
 
                 # Replace new line
                 text = text.replace('\n', '、')
@@ -72,7 +72,7 @@ async def on_message(message):
                 match = re.findall(pattern, text)
                 for user_id in match:
                     user = await client.fetch_user(user_id)
-                    user_name = f'、{user.name}へのメンション、'
+                    user_name = f'、{user.display_name}へのメンション、'
                     text = re.sub(rf'<@!?{user_id}>', user_name, text)
 
                 # Replace mention to role
@@ -140,7 +140,7 @@ async def on_voice_state_update(member, before, after):
                 await after.channel.connect()
             else:
                 if member.guild.voice_client.channel is after.channel:
-                    text = member.name + 'さんが入室しました'
+                    text = member.display_name + 'さんが入室しました'
                     mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
@@ -156,7 +156,7 @@ async def on_voice_state_update(member, before, after):
                         await asyncio.sleep(0.5)
                         await member.guild.voice_client.disconnect()
                     else:
-                        text = member.name + 'さんが退室しました'
+                        text = member.display_name + 'さんが退室しました'
                         mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
