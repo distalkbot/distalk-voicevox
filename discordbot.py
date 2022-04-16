@@ -82,6 +82,7 @@ async def on_message(message):
         if not message.author.bot:
             if not message.content.startswith(prefix):
                 text = message.content
+                print("got text:", text, end="")
 
                 # Add author's name
                 text = message.author.display_name + '、' + text
