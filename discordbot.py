@@ -76,77 +76,84 @@ async def 切断(ctx):
             await ctx.voice_client.disconnect()
 
 
+def text_converter(text: str) -> str:
+    """
+    docstring
+    """
+    print("got text:", text, end="")
+    # Add author's name
+    text = message.author.display_name + '、' + text
+
+    # Replace new line
+    text = text.replace('\n', '、')
+
+    # Replace mention to user
+    user_mentions = message.mentions
+    for um in user_mentions:
+        text = text.replace(
+            um.mention, f"、{m.display_name}さんへのメンション")
+
+    # Replace mention to role
+    role_mentions = message.role_mentions
+    for rm in role_mentions:
+        text = text.replace(
+            rm.mention, f"、{rm.name}へのメンション")
+
+    # Replace Unicode emoji
+    text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
+    text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
+    for char in text:
+        if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
+            text = text.replace(
+                char, emoji_dataset[char]['short_name'])
+
+    # Replace Discord emoji
+    pattern = r'<:([a-zA-Z0-9_]+):\d+>'
+    match = re.findall(pattern, text)
+    for emoji_name in match:
+        emoji_read_name = emoji_name.replace('_', ' ')
+        text = re.sub(rf'<:{emoji_name}:\d+>',
+                      f'、{emoji_read_name}、', text)
+
+    # Replace URL
+    pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
+    text = re.sub(pattern, '画像', text)
+    pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
+    text = re.sub(pattern, '、画像', text)
+    pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
+    text = re.sub(pattern, '、URL', text)
+
+    # Replace spoiler
+    pattern = r'\|{2}.+?\|{2}'
+    text = re.sub(pattern, '伏せ字', text)
+
+    # Replace laughing expression
+    if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
+        while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
+            text = text[:-1]
+        text = text[:-1] + '、ワラ'
+
+    # Add attachment presence
+    for attachment in message.attachments:
+        if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
+            text += '、画像'
+        else:
+            text += '、添付ファイル'
+
+    etk_text = ETK.convert(text)
+    a2k_text = jaconv.alphabet2kana(text)
+    text = jaconv.alphabet2kana(etk_text.lower())
+    print(" -> ", text, f" (ETK:{etk_text}, A2K:{a2k_text})")
+    return text
+
+
 @client.event
 async def on_message(message):
     if message.guild.voice_client:
         if not message.author.bot:
             if not message.content.startswith(prefix):
                 text = message.content
-                print("got text:", text, end="")
-
-                # Add author's name
-                text = message.author.display_name + '、' + text
-
-                # Replace new line
-                text = text.replace('\n', '、')
-
-                # Replace mention to user
-                user_mentions = message.mentions
-                for um in user_mentions:
-                    text = text.replace(
-                        um.mention, f"、{m.display_name}さんへのメンション")
-
-                # Replace mention to role
-                role_mentions = message.role_mentions
-                for rm in role_mentions:
-                    text = text.replace(
-                        rm.mention, f"、{rm.name}へのメンション")
-
-                # Replace Unicode emoji
-                text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
-                text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
-                for char in text:
-                    if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
-                        text = text.replace(
-                            char, emoji_dataset[char]['short_name'])
-
-                # Replace Discord emoji
-                pattern = r'<:([a-zA-Z0-9_]+):\d+>'
-                match = re.findall(pattern, text)
-                for emoji_name in match:
-                    emoji_read_name = emoji_name.replace('_', ' ')
-                    text = re.sub(rf'<:{emoji_name}:\d+>',
-                                  f'、{emoji_read_name}、', text)
-
-                # Replace URL
-                pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
-                text = re.sub(pattern, '画像', text)
-                pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
-                text = re.sub(pattern, '、画像', text)
-                pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
-                text = re.sub(pattern, '、URL', text)
-
-                # Replace spoiler
-                pattern = r'\|{2}.+?\|{2}'
-                text = re.sub(pattern, '伏せ字', text)
-
-                # Replace laughing expression
-                if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
-                    while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
-                        text = text[:-1]
-                    text = text[:-1] + '、ワラ'
-
-                # Add attachment presence
-                for attachment in message.attachments:
-                    if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
-                        text += '、画像'
-                    else:
-                        text += '、添付ファイル'
-
-                etk_text = ETK.convert(text)
-                a2k_text = jaconv.alphabet2kana(text)
-                text = jaconv.alphabet2kana(etk_text.lower())
-                print(" -> ", text, f" (ETK:{etk_text}, A2K:{a2k_text})")
+                text = text_converter(text)
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
@@ -167,7 +174,7 @@ async def on_voice_state_update(member, before, after):
             else:
                 if member.guild.voice_client.channel is after.channel:
                     text = member.display_name + 'さんが入室しました'
-                    text = EnglishToKana(text)
+                    text = text_converter(text)
                     mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
@@ -185,7 +192,7 @@ async def on_voice_state_update(member, before, after):
                         await member.guild.voice_client.disconnect()
                     else:
                         text = member.display_name + 'さんが退室しました'
-                        text = EnglishToKana(text)
+                        text = text_converter(text)
                         mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
