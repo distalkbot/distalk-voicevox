@@ -17,20 +17,24 @@ client = commands.Bot(command_prefix=prefix)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
 
+
 @client.event
 async def on_ready():
     presence = f'{prefix}ヘルプ | 0/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
+
 
 @client.event
 async def on_guild_join(guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
 
+
 @client.event
 async def on_guild_remove(guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
+
 
 @client.command()
 async def 接続(ctx):
@@ -48,6 +52,7 @@ async def 接続(ctx):
             else:
                 await ctx.author.voice.channel.connect()
 
+
 @client.command()
 async def 切断(ctx):
     if ctx.message.guild:
@@ -55,6 +60,7 @@ async def 切断(ctx):
             await ctx.send('ボイスチャンネルに接続していません。')
         else:
             await ctx.voice_client.disconnect()
+
 
 @client.event
 async def on_message(message):
@@ -90,14 +96,16 @@ async def on_message(message):
                 text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
                 for char in text:
                     if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
-                        text = text.replace(char, emoji_dataset[char]['short_name'])
+                        text = text.replace(
+                            char, emoji_dataset[char]['short_name'])
 
                 # Replace Discord emoji
                 pattern = r'<:([a-zA-Z0-9_]+):\d+>'
                 match = re.findall(pattern, text)
                 for emoji_name in match:
                     emoji_read_name = emoji_name.replace('_', ' ')
-                    text = re.sub(rf'<:{emoji_name}:\d+>', f'、{emoji_read_name}、', text)
+                    text = re.sub(rf'<:{emoji_name}:\d+>',
+                                  f'、{emoji_read_name}、', text)
 
                 # Replace URL
                 pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
@@ -123,7 +131,7 @@ async def on_message(message):
                         text += '、画像'
                     else:
                         text += '、添付ファイル'
-                        
+
                 text = EnglishToKana(text)
                 text = jaconv.alphabet2kata(text)
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
@@ -131,6 +139,7 @@ async def on_message(message):
                     await asyncio.sleep(0.5)
                 message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
     await client.process_commands(message)
+
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -149,7 +158,8 @@ async def on_voice_state_update(member, before, after):
                     mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    member.guild.voice_client.play(
+                        discord.FFmpegPCMAudio(mp3url))
     elif after.channel is None:
         if member.id == client.user.id:
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
@@ -166,7 +176,8 @@ async def on_voice_state_update(member, before, after):
                         mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
-                        member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                        member.guild.voice_client.play(
+                            discord.FFmpegPCMAudio(mp3url))
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
@@ -176,11 +187,14 @@ async def on_voice_state_update(member, before, after):
                     await asyncio.sleep(0.5)
                     await after.channel.connect()
 
+
 @client.event
 async def on_command_error(ctx, error):
     orig_error = getattr(error, 'original', error)
-    error_msg = ''.join(traceback.TracebackException.from_exception(orig_error).format())
+    error_msg = ''.join(
+        traceback.TracebackException.from_exception(orig_error).format())
     await ctx.send(error_msg)
+
 
 @client.command()
 async def ヘルプ(ctx):
