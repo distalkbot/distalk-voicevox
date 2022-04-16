@@ -225,9 +225,9 @@ class EnglishToKana:
     def convert(self, text: str) -> str:
         english_words = re.finditer(r'[a-zA-Z]+', text)
         for match in english_words:
-            word = match.string.lower()
+            word = match.group().lower()
             if word in self.eng_kana_dic:
-                text = text.replace(match.string, self.eng_kana_dic[word])
+                text = text.replace(match.group(), self.eng_kana_dic[word], 1)
         return text
 
 
