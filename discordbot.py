@@ -7,7 +7,7 @@ import re
 import emoji
 import json
 import jaconv
-import english_to_kana
+from english_to_kana import EnglishToKana
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 token = os.environ['DISCORD_BOT_TOKEN']
