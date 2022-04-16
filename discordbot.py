@@ -183,7 +183,7 @@ async def on_message(message):
                         discord.FFmpegPCMAudio(mp3_path))
                     os.remove(mp3_path)
                 else:
-                    await message.reply("音声のダウンロードがミスっちゃいました、ごめんなさい！")
+                    await message.reply("音声のダウンロードをミスっちゃいました、ごめんなさい！")
     await client.process_commands(message)
 
 
