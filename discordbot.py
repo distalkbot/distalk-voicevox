@@ -47,7 +47,7 @@ async def on_guild_remove(guild):
     await client.change_presence(activity=discord.Game(name=presence))
 
 
-@client.command()
+@client.command(alias=["connect", "con"])
 async def 接続(ctx):
     if ctx.message.guild:
         if ctx.author.voice is None:
@@ -64,7 +64,7 @@ async def 接続(ctx):
                 await ctx.author.voice.channel.connect()
 
 
-@client.command()
+@client.command(alias=["disconnect", "discon", "dis"])
 async def 切断(ctx):
     if ctx.message.guild:
         if ctx.voice_client is None:
@@ -207,7 +207,7 @@ async def on_command_error(ctx, error):
     await ctx.send(error_msg)
 
 
-@client.command()
+@client.command(alias=["help", "h"])
 async def ヘルプ(ctx):
     message = f'''◆◇◆{client.user.name}の使い方◆◇◆
 {prefix}＋コマンドで命令できます。
