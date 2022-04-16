@@ -9,10 +9,21 @@ import json
 import jaconv
 from english_to_kana import EnglishToKana
 
-prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
-token = os.environ['DISCORD_BOT_TOKEN']
-voicevox_key = os.environ['VOICEVOX_KEY']
-voicevox_speaker = os.getenv('VOICEVOX_SPEAKER', default='2')
+DEBUG = False
+
+if not DEBUG:
+    pass
+    prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
+    token = os.environ['DISCORD_BOT_TOKEN']
+    voicevox_key = os.environ['VOICEVOX_KEY']
+    voicevox_speaker = os.getenv('VOICEVOX_SPEAKER', default='2')
+else:
+    prefix = "/"
+    token = os.environ['GEKKA_DISCORD_BOT_TOKEN']
+    voicevox_key = os.environ['GEKKA_VOICEVOX_KEY']
+    voicevox_speaker = "2"
+
+
 client = commands.Bot(command_prefix=prefix)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
