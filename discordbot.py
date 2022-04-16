@@ -28,6 +28,8 @@ client = commands.Bot(command_prefix=prefix)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
 
+ETK = EnglishToKana()
+
 
 @client.event
 async def on_ready():
@@ -139,8 +141,9 @@ async def on_message(message):
                     else:
                         text += '、添付ファイル'
 
-                text = EnglishToKana(text)
+                text = ETK.convert(text)
                 text = jaconv.alphabet2kata(text)
+                print(" -> ", text)
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
