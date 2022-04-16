@@ -76,28 +76,30 @@ async def 切断(ctx):
             await ctx.voice_client.disconnect()
 
 
-def text_converter(text: str) -> str:
+def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     """
     docstring
     """
     print("got text:", text, end="")
-    # Add author's name
-    text = message.author.display_name + '、' + text
 
-    # Replace new line
     text = text.replace('\n', '、')
+    if message:
+        # Add author's name
+        text = message.author.display_name + '、' + text
 
-    # Replace mention to user
-    user_mentions = message.mentions
-    for um in user_mentions:
-        text = text.replace(
-            um.mention, f"、{m.display_name}さんへのメンション")
+        # Replace new line
 
-    # Replace mention to role
-    role_mentions = message.role_mentions
-    for rm in role_mentions:
-        text = text.replace(
-            rm.mention, f"、{rm.name}へのメンション")
+        # Replace mention to user
+        user_mentions = message.mentions
+        for um in user_mentions:
+            text = text.replace(
+                um.mention, f"、{um.display_name}さんへのメンション")
+
+        # Replace mention to role
+        role_mentions = message.role_mentions
+        for rm in role_mentions:
+            text = text.replace(
+                rm.mention, f"、{rm.name}へのメンション")
 
     # Replace Unicode emoji
     text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
@@ -153,7 +155,7 @@ async def on_message(message):
         if not message.author.bot:
             if not message.content.startswith(prefix):
                 text = message.content
-                text = text_converter(text)
+                text = text_converter(text, message)
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                 download_path = f'tmp/{message.id}'
                 if not os.path.exists(download_path):
