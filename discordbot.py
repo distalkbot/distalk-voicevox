@@ -87,20 +87,16 @@ async def on_message(message):
                 text = text.replace('\n', '、')
 
                 # Replace mention to user
-                pattern = r'<@!?(\d+)>'
-                match = re.findall(pattern, text)
-                for user_id in match:
-                    user = await client.fetch_user(user_id)
-                    user_name = f'、{user.display_name}へのメンション、'
-                    text = re.sub(rf'<@!?{user_id}>', user_name, text)
+                user_mentions = message.mentions
+                for um in user_mentions:
+                    text = text.replace(
+                        um.mention, f"、{m.display_name}さんへのメンション")
 
                 # Replace mention to role
-                pattern = r'<@&(\d+)>'
-                match = re.findall(pattern, text)
-                for role_id in match:
-                    role = message.guild.get_role(int(role_id))
-                    role_name = f'、{role.name}へのメンション、'
-                    text = re.sub(f'<@&{role_id}>', role_name, text)
+                role_mentions = message.role_mentions
+                for rm in role_mentions:
+                    text = text.replace(
+                        rm.mention, f"、{rm.name}へのメンション")
 
                 # Replace Unicode emoji
                 text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
