@@ -143,9 +143,10 @@ async def on_message(message):
                     else:
                         text += '、添付ファイル'
 
-                text = ETK.convert(text)
-                text = jaconv.alphabet2kata(text)
-                print(" -> ", text)
+                etk_text = ETK.convert(text)
+                a2k_text = jaconv.alphabet2kata(text)
+                text = a2k_text
+                print(" -> ", text, f" (ETK:{etk_text}, A2K:{a2k_text})")
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
