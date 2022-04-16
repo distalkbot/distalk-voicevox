@@ -155,9 +155,33 @@ async def on_message(message):
                 text = message.content
                 text = text_converter(text)
                 mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
-                while message.guild.voice_client.is_playing():
-                    await asyncio.sleep(0.5)
-                message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                download_path = f'tmp/{message.id}'
+                if not os.path.exists(download_path):
+                    os.makedirs(download_path, exist_ok=True)
+                mp3_path = f'{download_path}/{message.id}.mp3'
+                if not os.path.exists(mp3_path):
+                    print("Downloading...")
+                    try:
+                        async with aiohttp.ClientSession() as session:
+                            async with session.get(mp3url) as resp:
+                                if resp.status == 200:
+                                    with open(mp3_path, 'wb') as f:
+                                        f.write(await resp.read())
+                                    print("Downloaded.")
+                                else:
+                                    print("Download failed.")
+                    except Exception as e:
+                        print("Download failed cuz something error happend;", e)
+                else:
+                    print("Already downloaded.")
+                if os.path.exists(mp3_path):
+                    while message.guild.voice_client.is_playing():
+                        await asyncio.sleep(0.5)
+                    message.guild.voice_client.play(
+                        discord.FFmpegPCMAudio(mp3_path))
+                    os.remove(mp3_path)
+                else:
+                    await message.reply("音声のダウンロードがミスっちゃいました、ごめんなさい！")
     await client.process_commands(message)
 
 
