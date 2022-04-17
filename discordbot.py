@@ -10,6 +10,7 @@ import emoji
 import json
 import jaconv
 import cyrtranslit
+from ko_pron import romanise
 from english_to_kana import EnglishToKana
 
 DEBUG = False
@@ -147,6 +148,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
                 text += '、添付ファイル'
 
     text = cyrtranslit.to_latin(text, 'ru')
+    text = romanise(text, "mr")
     etk_text = ETK.convert(text)
     a2k_text = jaconv.alphabet2kana(text)
     text = jaconv.alphabet2kana(etk_text.lower())
