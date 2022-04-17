@@ -80,7 +80,7 @@ async def 切断(ctx):
 
 def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     """
-    docstring
+    the converter of text for voicevox
     """
     print("got text:", text, end="")
 
@@ -154,7 +154,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
 
 async def mp3_player(text: str, voice_client: discord.VoiceClient, message: Optional[discord.Message] = None):
     """
-    docstring
+    playing a mp3 exported voicevox
     """
     mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
     while voice_client.is_playing():
