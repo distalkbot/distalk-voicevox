@@ -87,7 +87,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     the converter of text for voicevox
     """
     print("got text:", text, end="")
-
+    langcode = detect(text)
     text = text.replace('\n', '、')
     if isinstance(message, discord.Message):
         # Add author's name
