@@ -11,6 +11,7 @@ cyrtranslit = "*"
 ko-pron = "*"
 pinyin = "*"
 langdetect = "*"
+pycld2 = "*"
 
 [dev-packages]
 ipykernel = "*"

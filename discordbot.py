@@ -11,6 +11,7 @@ import json
 import jaconv
 import cyrtranslit
 import pinyin
+import pycld2 as cld2
 from langdetect import detect
 from ko_pron import romanise
 from english_to_kana import EnglishToKana
@@ -87,7 +88,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     the converter of text for voicevox
     """
     print("got text:", text, end="")
-    langcode = detect(text)
+    isReliable, textBytesFound, details = cld2.detect(text)
     text = text.replace('\n', '、')
     if isinstance(message, discord.Message):
         # Add author's name
@@ -150,7 +151,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
                 text += '、添付ファイル'
 
 
-    if langcode == "zh-cn":
+    if details[0][1] == "zh-cn":
         text = pinyin.get(text, format="strip", delimiter="")
     else:
         text = cyrtranslit.to_latin(text, 'ru')
@@ -160,7 +161,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
         text = romanise(text, "rr")
 
     text = jaconv.alphabet2kana(text)
-    print(" -> ", text, f" (detected langcode: {langcode})")
+    print(" -> ", text, f" (detected langcode: {details[0][1]})")
     return text
 
 
