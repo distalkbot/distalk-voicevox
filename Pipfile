@@ -9,6 +9,7 @@ emoji = "*"
 jaconv = "*"
 cyrtranslit = "*"
 ko-pron = "*"
+pinyin = "*"
 
 [dev-packages]
 ipykernel = "*"

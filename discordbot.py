@@ -10,6 +10,7 @@ import emoji
 import json
 import jaconv
 import cyrtranslit
+import pinyin
 from ko_pron import romanise
 from english_to_kana import EnglishToKana
 
@@ -152,6 +153,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     a2k_text = jaconv.alphabet2kana(text)
     text = jaconv.alphabet2kana(etk_text.lower())
     text = romanise(text, "rr")
+    text = pinyin.get(text, format="strip", delimiter="")
     text = jaconv.alphabet2kana(text)
     print(" -> ", text, f" (ETK:{etk_text}, A2K:{a2k_text})")
     return text
