@@ -152,7 +152,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     a2k_text = jaconv.alphabet2kana(text)
     text = jaconv.alphabet2kana(etk_text.lower())
     text = romanise(text, "rr")
-    text = jaconv.alphabet2kana(etk_text.lower())
+    text = jaconv.alphabet2kana(text)
     print(" -> ", text, f" (ETK:{etk_text}, A2K:{a2k_text})")
     return text
 
