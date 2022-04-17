@@ -9,6 +9,7 @@ import re
 import emoji
 import json
 import jaconv
+import cyrtranslit
 from english_to_kana import EnglishToKana
 
 DEBUG = False
@@ -125,7 +126,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
     text = re.sub(pattern, '、画像', text)
     pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
-    text = re.sub(pattern, '、URL', text)
+    text = re.sub(pattern, '、ユーアールエル', text)
 
     # Replace spoiler
     pattern = r'\|{2}.+?\|{2}'
@@ -145,6 +146,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
             else:
                 text += '、添付ファイル'
 
+    text = cyrtranslit.to_latin(text, 'ru')
     etk_text = ETK.convert(text)
     a2k_text = jaconv.alphabet2kana(text)
     text = jaconv.alphabet2kana(etk_text.lower())
