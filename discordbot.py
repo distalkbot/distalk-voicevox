@@ -42,19 +42,19 @@ async def on_ready():
 
 
 @client.event
-async def on_guild_join(guild):
+async def on_guild_join(guild: discord.Guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
 
 
 @client.event
-async def on_guild_remove(guild):
+async def on_guild_remove(guild: discord.Guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
 
 
 @client.command(alias=["connect", "con"])
-async def 接続(ctx):
+async def 接続(ctx: commands.Context):
     if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
@@ -71,7 +71,7 @@ async def 接続(ctx):
 
 
 @client.command(alias=["disconnect", "discon", "dis"])
-async def 切断(ctx):
+async def 切断(ctx: commands.Context):
     if ctx.message.guild:
         if ctx.voice_client is None:
             await ctx.send('ボイスチャンネルに接続していません。')
@@ -170,7 +170,7 @@ async def mp3_player(text: str, voice_client: discord.VoiceClient, message: Opti
 
 
 @client.event
-async def on_message(message):
+async def on_message(message: discord.Message):
     if message.guild.voice_client:
         if not message.author.bot:
             if not message.content.startswith(prefix) and message.author.guild.voice_client:
@@ -181,7 +181,7 @@ async def on_message(message):
 
 
 @client.event
-async def on_voice_state_update(member, before, after):
+async def on_voice_state_update(member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
     if before.channel is None:
         if member.id == client.user.id:
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
@@ -220,7 +220,7 @@ async def on_voice_state_update(member, before, after):
 
 
 @client.event
-async def on_command_error(ctx, error):
+async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     orig_error = getattr(error, 'original', error)
     error_msg = ''.join(
         traceback.TracebackException.from_exception(orig_error).format())
@@ -228,7 +228,7 @@ async def on_command_error(ctx, error):
 
 
 @client.command(alias=["help", "h"])
-async def ヘルプ(ctx):
+async def ヘルプ(ctx: commands.Context):
     message = f'''◆◇◆{client.user.name}の使い方◆◇◆
 {prefix}＋コマンドで命令できます。
 {prefix}接続：ボイスチャンネルに接続します。
