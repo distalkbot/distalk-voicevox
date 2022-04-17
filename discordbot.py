@@ -149,7 +149,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
             else:
                 text += '、添付ファイル'
 
-    langcode = detect(text)
+
     if langcode == "zh-cn":
         text = pinyin.get(text, format="strip", delimiter="")
     else:
