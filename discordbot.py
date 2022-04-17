@@ -148,9 +148,10 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
                 text += '、添付ファイル'
 
     text = cyrtranslit.to_latin(text, 'ru')
-    text = romanise(text, "mr")
     etk_text = ETK.convert(text)
     a2k_text = jaconv.alphabet2kana(text)
+    text = jaconv.alphabet2kana(etk_text.lower())
+    text = romanise(text, "rr")
     text = jaconv.alphabet2kana(etk_text.lower())
     print(" -> ", text, f" (ETK:{etk_text}, A2K:{a2k_text})")
     return text
