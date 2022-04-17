@@ -8,6 +8,7 @@ name = "pypi"
 emoji = "*"
 jaconv = "*"
 cyrtranslit = "*"
+ko-pron = "*"
 
 [dev-packages]
 ipykernel = "*"
