@@ -85,7 +85,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     print("got text:", text, end="")
 
     text = text.replace('\n', '、')
-    if isinstance(message,discord.Message):
+    if isinstance(message, discord.Message):
         # Add author's name
         text = message.author.display_name + '、' + text
 
