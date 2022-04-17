@@ -152,18 +152,12 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     langcode = detect(text)
     if langcode == "zh-cn":
         text = pinyin.get(text, format="strip", delimiter="")
-    elif langcode == "en":
-        etk_text = ETK.convert(text)
-        text = jaconv.alphabet2kana(etk_text.lower())
-    elif langcode == "ja":
-        text = jaconv.alphabet2kana(text)
-    elif langcode == "ru":
-        text = cyrtranslit.to_latin(text, 'ru')
-        text = romanise(text, "rr")
-        text = jaconv.alphabet2kana(text)
     else:
+        text = cyrtranslit.to_latin(text, 'ru')
+        etk_text = ETK.convert(text)
+        a2k_text = jaconv.alphabet2kana(text)
+        text = jaconv.alphabet2kana(etk_text.lower())
         text = romanise(text, "rr")
-        text = jaconv.alphabet2kana(text)
 
     text = jaconv.alphabet2kana(text)
     print(" -> ", text, f" (detected langcode: {langcode})")
