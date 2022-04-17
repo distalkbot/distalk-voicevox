@@ -85,7 +85,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     print("got text:", text, end="")
 
     text = text.replace('\n', '、')
-    if message:
+    if isinstance(message,discord.Message):
         # Add author's name
         text = message.author.display_name + '、' + text
 
@@ -138,11 +138,12 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
         text = text[:-1] + '、ワラ'
 
     # Add attachment presence
-    for attachment in message.attachments:
-        if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
-            text += '、画像'
-        else:
-            text += '、添付ファイル'
+    if isinstance(message, discord.Message):
+        for attachment in message.attachments:
+            if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
+                text += '、画像'
+            else:
+                text += '、添付ファイル'
 
     etk_text = ETK.convert(text)
     a2k_text = jaconv.alphabet2kana(text)
