@@ -151,7 +151,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
                 text += '、添付ファイル'
 
 
-    if details[0][1] == "zh-cn":
+    if details[0][1] == "zh":
         text = pinyin.get(text, format="strip", delimiter="")
     else:
         text = cyrtranslit.to_latin(text, 'ru')
