@@ -10,6 +10,7 @@ jaconv = "*"
 cyrtranslit = "*"
 ko-pron = "*"
 pinyin = "*"
+langdetect = "*"
 
 [dev-packages]
 ipykernel = "*"
