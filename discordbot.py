@@ -171,7 +171,7 @@ async def mp3_player(text: str, voice_client: discord.VoiceClient, message: Opti
 async def on_message(message):
     if message.guild.voice_client:
         if not message.author.bot:
-            if not message.content.startswith(prefix):
+            if not message.content.startswith(prefix) and message.author.guild.voice_client:
                 text = message.content
                 text = text_converter(text, message)
                 # download_path = f'tmp'
