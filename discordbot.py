@@ -156,7 +156,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     text = jaconv.alphabet2kana(etk_text.lower())
     text = romanise(text, "rr")
 
-    if langcode = "zh-cn":
+    if langcode == "zh-cn":
         text = pinyin.get(text, format="strip", delimiter="")
 
     text = jaconv.alphabet2kana(text)
