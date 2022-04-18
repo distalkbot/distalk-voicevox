@@ -17,6 +17,7 @@ from ko_pron import romanise
 from english_to_kana import EnglishToKana
 
 DEBUG = False
+pastauthor = ""
 
 if not DEBUG:
     pass
