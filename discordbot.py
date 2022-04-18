@@ -153,7 +153,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     # Text converting from every lang.
     if details[0][1] == "zh":
         text = pinyin.get(text, format="strip", delimiter="")
-    elif details[0][1] == "kr":
+    elif details[0][1] == "ko":
         text = romanise(text, "rr")
     else:
         text = cyrtranslit.to_latin(text, 'ru')
