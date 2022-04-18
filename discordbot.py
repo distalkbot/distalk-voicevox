@@ -150,9 +150,11 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
             else:
                 text += '、添付ファイル'
 
-
+    # Text converting from every lang.
     if details[0][1] == "zh":
         text = pinyin.get(text, format="strip", delimiter="")
+    elif langcode == "kr":
+        text = romanise(text, "rr")
     else:
         text = cyrtranslit.to_latin(text, 'ru')
         etk_text = ETK.convert(text)
