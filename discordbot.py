@@ -93,6 +93,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     text = text.replace('\n', '、')
     if isinstance(message, discord.Message):
         # Add author's name
+        global pastauthor
         if pastauthor == message.author.display_name:
             pass
         else:
