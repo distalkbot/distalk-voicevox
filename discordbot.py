@@ -153,6 +153,12 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
 
     if details[0][1] == "zh":
         text = pinyin.get(text, format="strip", delimiter="")
+    elif langcode == "un":
+        text = cyrtranslit.to_latin(text, 'ru')
+        etk_text = ETK.convert(text)
+        a2k_text = jaconv.alphabet2kana(text)
+        text = jaconv.alphabet2kana(etk_text.lower())
+        text = romanise(text, "rr")
     else:
         text = cyrtranslit.to_latin(text, 'ru')
         etk_text = ETK.convert(text)
