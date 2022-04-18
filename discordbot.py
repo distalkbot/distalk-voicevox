@@ -92,7 +92,12 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     text = text.replace('\n', '、')
     if isinstance(message, discord.Message):
         # Add author's name
-        text = message.author.display_name + '、' + text
+        if pastauthor == message.author.display_name
+            pass
+        else:
+            text = message.author.display_name + '、' + text
+
+        pastauthor = message.author.display_name
 
         # Replace new line
 
