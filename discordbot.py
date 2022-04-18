@@ -175,7 +175,7 @@ async def mp3_player(text: str, voice_client: discord.VoiceClient, message: Opti
     while voice_client.is_playing():
         await asyncio.sleep(0.5)
     try:
-        voice_client.play(discord.FFmpegPCMAudio(mp3url))
+        voice_client.play(discord.FFmpegPCMAudio(mp3url), volume=0.5)
     except OSError as e:
         print("audio playing stopped cuz fatal error occurred:", e)
         if message:
