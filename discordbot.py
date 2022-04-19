@@ -108,7 +108,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None, now_aut
         user_mentions: List[discord.Member] = message.mentions
         for um in user_mentions:
             text = text.replace(
-                um.mention, f"、{um.display_name}さんへのメンション")
+                f"<@{um.id}>", f"、{um.display_name}さんへのメンション")
 
         # Replace mention to role
         role_mentions: List[discord.Role] = message.role_mentions
