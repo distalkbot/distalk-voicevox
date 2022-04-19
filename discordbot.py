@@ -89,7 +89,14 @@ def text_converter(text: str, message: Optional[discord.Message] = None, now_aut
     the converter of text for voicevox
     """
     print("got text:", text, end="")
-    isReliable, textBytesFound, details = cld2.detect(text)
+    detected_lang: Optional[str] = None
+    try:
+        isReliable, textBytesFound, details = cld2.detect(text)
+        detected_lang = details[0][1]
+    except cld2.error as e:
+        # print("ignore error:", e)
+        pass
+
     text = text.replace('\n', '、')
     if isinstance(message, discord.Message):
         # Add author's name
@@ -153,9 +160,9 @@ def text_converter(text: str, message: Optional[discord.Message] = None, now_aut
                 text += '、添付ファイル'
 
     # Text converting from every lang.
-    if details[0][1] == "zh":
+    if detected_lang == "zh":
         text = pinyin.get(text, format="strip", delimiter="")
-    elif details[0][1] == "ko":
+    elif detected_lang == "ko":
         text = romanise(text, "rr")
     else:
         text = cyrtranslit.to_latin(text, 'ru')
@@ -165,7 +172,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None, now_aut
         #text = romanise(text, "rr")
 
     text = jaconv.alphabet2kana(text)
-    print(" -> ", text, f" (detected langcode: {details[0][1]})")
+    print(" -> ", text, f" (detected langcode: {detected_lang})")
     return text
 
 
