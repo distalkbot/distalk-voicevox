@@ -97,13 +97,12 @@ def text_converter(text: str, message: Optional[discord.Message] = None, now_aut
         # print("ignore error:", e)
         pass
 
+    # Replace new line
     text = text.replace('\n', '、')
     if isinstance(message, discord.Message):
         # Add author's name
         if now_author:
             text = message.author.display_name + '、' + text
-
-        # Replace new line
 
         # Replace mention to user
         user_mentions = message.mentions
