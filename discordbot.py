@@ -1,5 +1,5 @@
 import asyncio
-from typing import Optional
+from typing import Dict, List, Optional
 import aiohttp
 import discord
 from discord.ext import commands
@@ -17,7 +17,7 @@ from ko_pron import romanise
 from english_to_kana import EnglishToKana
 
 DEBUG = False
-pastauthor = "nope"
+pastauthor: Dict[int, discord.abc.User] = {}
 
 if not DEBUG:
     pass
@@ -84,7 +84,7 @@ async def 切断(ctx: commands.Context):
             await ctx.voice_client.disconnect()
 
 
-def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
+def text_converter(text: str, message: Optional[discord.Message] = None, now_author: Optional[discord.Member] = None) -> str:
     """
     the converter of text for voicevox
     """
@@ -93,13 +93,8 @@ def text_converter(text: str, message: Optional[discord.Message] = None) -> str:
     text = text.replace('\n', '、')
     if isinstance(message, discord.Message):
         # Add author's name
-        global pastauthor
-        if pastauthor == message.author.display_name:
-            pass
-        else:
+        if now_author:
             text = message.author.display_name + '、' + text
-
-        pastauthor = message.author.display_name
 
         # Replace new line
 
@@ -194,9 +189,14 @@ async def on_message(message: discord.Message):
     if message.guild.voice_client:
         if not message.author.bot:
             if not message.content.startswith(prefix) and message.author.guild.voice_client:
+                author = None
+                if message.guild.id not in pastauthor.keys() or pastauthor[message.guild.id] == message.author:
+                    pastauthor[message.guild.id] = message.author
+                    author = message.author
+
                 text = message.content
-                text = text_converter(text, message)
-                await mp3_player(text, message.guild.voice_client, message)
+                text = text_converter(text, message, author)
+                await mp3_player(text, message.guild.voice_client)
     await client.process_commands(message)
 
 
