@@ -105,13 +105,13 @@ def text_converter(text: str, message: Optional[discord.Message] = None, now_aut
             text = message.author.display_name + '、' + text
 
         # Replace mention to user
-        user_mentions = message.mentions
+        user_mentions: List[discord.Member] = message.mentions
         for um in user_mentions:
             text = text.replace(
                 um.mention, f"、{um.display_name}さんへのメンション")
 
         # Replace mention to role
-        role_mentions = message.role_mentions
+        role_mentions: List[discord.Role] = message.role_mentions
         for rm in role_mentions:
             text = text.replace(
                 rm.mention, f"、{rm.name}へのメンション")
