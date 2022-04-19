@@ -121,8 +121,7 @@ def text_converter(text: str, message: Optional[discord.Message] = None, now_aut
     text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
     for char in text:
         if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
-            text = text.replace(
-                char, emoji_dataset[char]['short_name'])
+            text = text.replace(char, emoji_dataset[char]['short_name'])
 
     # Replace Discord emoji
     pattern = r'<:([a-zA-Z0-9_]+):\d+>'
@@ -183,7 +182,8 @@ async def mp3_player(text: str, voice_client: discord.VoiceClient, message: Opti
     while voice_client.is_playing():
         await asyncio.sleep(0.5)
     try:
-        voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(mp3url), volume=0.75))
+        voice_client.play(discord.PCMVolumeTransformer(
+            discord.FFmpegPCMAudio(mp3url), volume=0.75))
     except OSError as e:
         print("audio playing stopped cuz fatal error occurred:", e)
         if message:
