@@ -57,14 +57,6 @@ async def 切断(ctx):
             await ctx.voice_client.disconnect()
 
 @client.command()
-async def 切断(ctx):
-    if ctx.message.guild:
-        if ctx.voice_client is None:
-            await ctx.send('ボイスチャンネルに接続していません。')
-        else:
-            await ctx.voice_client.disconnect()
-
-@client.command()
 async def 辞書登録(ctx, *args):
     if len(args) < 2:
         await ctx.send(f'「{prefix}辞書登録 単語 よみがな」で入力してください。')
