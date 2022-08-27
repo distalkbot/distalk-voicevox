@@ -12,7 +12,9 @@ prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 token = os.environ['DISCORD_BOT_TOKEN']
 voicevox_key = os.environ['VOICEVOX_KEY']
 voicevox_speaker = os.getenv('VOICEVOX_SPEAKER', default='2')
-client = commands.Bot(command_prefix=prefix)
+intents = discord.Intents.default()
+intents.message_content = True
+client = commands.Bot(command_prefix=prefix, intents=intents)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
 database_url = os.environ.get('DATABASE_URL')

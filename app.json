@@ -3,6 +3,7 @@
   "description": "Discord TTS on heroku, Powered by VOICEVOX API.",
   "repository": "https://github.com/distalkbot/distalk-voicevox",
   "keywords": ["python", "discord", "bot"],
+  "stack": "heroku-20",
   "buildpacks": [
     {
       "url": "https://github.com/heroku/heroku-buildpack-python.git"
