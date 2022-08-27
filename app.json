@@ -17,17 +17,17 @@
   ],
   "env": {
     "DISCORD_BOT_TOKEN": {
-            "description": "ボットのトークンを入力します。"
+            "description": "Enter your Discord bot token. ボットのトークンを入力します。"
     },
     "DISCORD_BOT_PREFIX": {
-            "description": "ボットのプレフィックスを入力します。空欄にすると「🦑」に設定されます。",
+            "description": "Enter your prefix. Set 🦑 as your prefix if you leave it blank. ボットのプレフィックスを入力します。空欄にすると「🦑」に設定されます。",
             "required": false
     },
     "VOICEVOX_KEY": {
-      "description": "VOICEVOXのKEYを入力します。"
+      "description": "Enter your VOICEVOX KEY. VOICEVOXのKEYを入力します。"
     },
     "VOICEVOX_SPEAKER": {
-      "description": "VOICEVOXの話者IDを入力します。空欄にすると「四国めたん ノーマル」に設定されます",
+      "description": "Enter the voice type. Set Shikoku Metan Normal if you leave it blank. VOICEVOXの話者IDを入力します。空欄にすると「四国めたん ノーマル」に設定されます",
       "required": false
     }
   },
