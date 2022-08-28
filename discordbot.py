@@ -29,7 +29,7 @@ else:
     prefix = "/"
     token = os.environ['GEKKA_DISCORD_BOT_TOKEN']
     voicevox_key = os.environ['GEKKA_VOICEVOX_KEY']
-    voicevox_speaker = "3"
+    voicevox_speaker = "2"
 
 
 client = commands.Bot(command_prefix=prefix)
