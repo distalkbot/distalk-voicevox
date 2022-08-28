@@ -31,8 +31,9 @@ else:
     voicevox_key = os.environ['GEKKA_VOICEVOX_KEY']
     voicevox_speaker = "2"
 
-intents.message_content = True
+
 intents = discord.Intents.all()
+intents.message_content = True
 client = commands.Bot(command_prefix=prefix, intents=intents)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
