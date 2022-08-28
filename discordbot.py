@@ -19,6 +19,9 @@ from english_to_kana import EnglishToKana
 DEBUG = False
 pastauthor: Dict[int, discord.abc.User] = {}
 
+intents = discord.Intents.default()
+intents.message_content = True
+
 if not DEBUG:
     pass
     prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
@@ -32,7 +35,7 @@ else:
     voicevox_speaker = "2"
 
 
-client = commands.Bot(command_prefix=prefix)
+client = commands.Bot(command_prefix=prefix, intents=intents)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
 
