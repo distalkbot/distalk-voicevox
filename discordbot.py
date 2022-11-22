@@ -35,6 +35,9 @@ intents = discord.Intents(all=True)
 client = commands.Bot(command_prefix=prefix, intents=intents)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
+with open("data/ignore_users.json", "r", encoding="utf-8") as f:
+    ignore_users = json.load(f)
+
 
 ETK = EnglishToKana()
 
@@ -193,7 +196,7 @@ async def mp3_player(text: str, voice_client: discord.VoiceClient, message: Opti
 @client.event
 async def on_message(message: discord.Message):
     if message.guild.voice_client:
-        if not message.author.bot:
+        if not message.author.bot and message.author.id not in ignore_users:
             if not message.content.startswith(prefix) and message.author.guild.voice_client:
                 author = None
                 if message.guild.id not in pastauthor.keys() or pastauthor[message.guild.id] == message.author:
